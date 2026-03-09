@@ -35,7 +35,7 @@ fi
 CACHE_DIR="${HOME}/.cache/claude-statusline"
 CACHE_FILE="${CACHE_DIR}/usage.json"
 PROFILE_FILE="${CACHE_DIR}/profile.json"
-CACHE_TTL=30  # seconds
+CACHE_TTL=120  # seconds
 
 mkdir -p "$CACHE_DIR"
 
@@ -64,7 +64,7 @@ fetch_usage() {
 
   # Usage
   local response
-  response=$(curl -sf --max-time 5 "${auth_headers[@]}" \
+  response=$(curl -sf --max-time 2 "${auth_headers[@]}" \
     "https://api.anthropic.com/api/oauth/usage" 2>/dev/null) || return 1
   echo "$response" > "$CACHE_FILE"
 
@@ -79,7 +79,7 @@ fetch_usage() {
   fi
   if [ "$profile_age" -gt 86400 ]; then
     local profile
-    profile=$(curl -sf --max-time 5 "${auth_headers[@]}" \
+    profile=$(curl -sf --max-time 2 "${auth_headers[@]}" \
       "https://api.anthropic.com/api/oauth/profile" 2>/dev/null) || return 0
     echo "$profile" > "$PROFILE_FILE"
   fi
@@ -100,10 +100,8 @@ else
   fi
 fi
 
-# Refresh in background to not block status line
 if [ "$need_refresh" = true ]; then
-  fetch_usage &
-  disown 2>/dev/null
+  fetch_usage
 fi
 
 # ANSI color codes
