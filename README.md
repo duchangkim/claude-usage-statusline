@@ -14,6 +14,7 @@ Claude Code status line plugin that displays API usage with a color-coded progre
 - **Account name** — display name from your Claude profile
 - **Non-blocking** — background fetch with 30s cache, no status line lag
 - **Cross-platform** — macOS (Keychain + file) and Linux (file) credential support
+- **Smart install** — detects existing statusline and appends usage segments instead of replacing
 
 ## Prerequisites
 
@@ -59,7 +60,15 @@ Then run `/setup-usage-statusline` inside Claude Code.
 3. Calls `GET /api/oauth/profile` to get account display name (cached for 24h)
 4. Renders a progress bar with ANSI colors in the Claude Code status line
 
-## Status line segments
+## Install modes
+
+### Full mode (no existing statusline)
+
+Sets up a complete status line with all segments:
+
+```
+~/project | main * | Claude Opus 4.6 | ctx 12% | 5h: ━━░░░░░░░░ 10% (3h 22m) | Duchang
+```
 
 | Segment   | Example                       | Description                   |
 | --------- | ----------------------------- | ----------------------------- |
@@ -69,6 +78,14 @@ Then run `/setup-usage-statusline` inside Claude Code.
 | Context   | `ctx 12%`                     | Context window usage          |
 | 5h Usage  | `5h: ━━░░░░░░░░ 10% (3h 22m)` | API usage bar + reset time    |
 | Account   | `Duchang`                     | Account display name (dimmed) |
+
+### Addon mode (existing statusline detected)
+
+Appends only usage segments to your current status line:
+
+```
+<your existing statusline> | 5h: ━━░░░░░░░░ 10% (3h 22m) | Duchang
+```
 
 ## License
 
